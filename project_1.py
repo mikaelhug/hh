@@ -1,11 +1,16 @@
+import struct
+import base64
 
-inputvar = "this is a string"
+# significant to float
+def s_to_f(significand: int) -> float:
+    base = 10
+    exponent = -2
+    return significand * base**exponent
 
-# Django - HTMX Tailwind (use instead of react)
-# Celery
+# decode the data from base64
+raw = base64.b64decode("NAkAALoLAAA=")
 
-def a_method_now(var1, var2:int) -> str:
-    return f"{var1}-{var2}"
+# unpack 2 little-endian 4-byte signed integer
+nums = struct.unpack("<ii", raw)
 
-
-print(a_method_now(2, 10))
+print(f"Temp: {s_to_f(nums[0])} C\nHumidity: {s_to_f(nums[1])} %")
