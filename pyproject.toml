@@ -1,0 +1,49 @@
+[tool.pyright]
+pythonVersion = "3.11"
+typeCheckingMode = "standard"
+exclude = ["**/migrations/", "**/__pycache__"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+exclude = ["**/migrations/*", "manage.py"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "ANN002", # missing-type-args
+  "ANN003", # missing-type-kwargs
+  "ANN401", # any-type
+  "COM812", # missing-trailing-comma
+  "D",      # pydocstyle
+  "FIX",    # flake8-fixme
+  "PT001",  #pytest-fixture-incorrect-parentheses-style
+  "TD001",  # 	invalid-todo-tag
+  "TD002",  #  missing-todo-author
+  "TD003",  #	missing-todo-link
+  "TD005",  #	missing-todo-description
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/*" = [
+  "ARG001",  # unused-function-argument
+  "ANN001",  # missing-type-function-argument
+  "FBT001",  # boolean-type-hint-positional-argument
+  "INP001",  # implicit-namespace-package
+  "PLR2004", # magic-value-comparison
+  "PLR0913", # too-many-arguments
+  "S101",    # assert
+  "S311",    # suspicious-non-cryptographic-random-usage
+  "SLF001",  # private-member-access
+]
+
+"**/tests/test_*" = [
+  "ANN201", # missing-return-type-undocumented-public-function
+  "ANN202", # missing-return-type-private-function
+]
+
+[tool.ruff.lint.isort]
+split-on-trailing-comma = true
+
+[tool.ruff.lint.flake8-builtins]
+builtins-ignorelist = ["type"]

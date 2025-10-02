@@ -1,0 +1,11 @@
+{
+	"settings": {
+		"python.languageServer": "Pylance",
+		"ruff.enable": true,
+	},
+	"folders": [
+		{
+			"path": "."
+		}
+	]
+}
