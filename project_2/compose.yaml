@@ -1,0 +1,55 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: hh_db
+    restart: "no"
+    networks:
+      - hh_network
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      TZ: Europe/Stockholm
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+
+  app:
+    build: .
+    image: hh_app
+    container_name: hh_app
+    restart: "no"
+    networks:
+      - hh_network
+    volumes:
+      - ./hh:/hh
+    environment:
+      TZ: Europe/Stockholm
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DEBUG: ${DEBUG}
+      DJANGO_LOGLEVEL: ${DJANGO_LOGLEVEL}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+      DATABASE_ENGINE: ${DATABASE_ENGINE}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+volumes:
+  db:
+    name: db
+
+networks:
+  hh_network:
+    name: hh_network
+    driver: bridge

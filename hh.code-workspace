@@ -2,6 +2,10 @@
 	"settings": {
 		"python.languageServer": "Pylance",
 		"ruff.enable": true,
+		"editor.codeActionsOnSave": {
+		// "source.fixAll": "explicit",
+		"source.fixAll.ruff": "explicit"
+	}
 	},
 	"folders": [
 		{
