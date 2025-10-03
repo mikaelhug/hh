@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+
 import os
 from pathlib import Path
 
@@ -25,8 +26,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get("DEBUG"))
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS","127.0.0.1").split(",")
-
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(",")
 
 # Application definition
 
@@ -69,15 +69,15 @@ TEMPLATES = [
 WSGI_APPLICATION = "helicon_hell.wsgi.application"
 
 DATABASES = {
-     "default": {
-         "ENGINE": f"django.db.backends.{os.getenv('DATABASE_ENGINE')}",
-         "NAME": os.getenv("DATABASE_NAME"),
-         "USER": os.getenv("DATABASE_USERNAME"),
-         "PASSWORD": os.getenv("DATABASE_PASSWORD"),
-         "HOST": os.getenv("DATABASE_HOST"),
-         "PORT": os.getenv("DATABASE_PORT"),
-     }
- }
+    "default": {
+        "ENGINE": f"django.db.backends.{os.getenv('DATABASE_ENGINE')}",
+        "NAME": os.getenv("DATABASE_NAME"),
+        "USER": os.getenv("DATABASE_USERNAME"),
+        "PASSWORD": os.getenv("DATABASE_PASSWORD"),
+        "HOST": os.getenv("DATABASE_HOST"),
+        "PORT": os.getenv("DATABASE_PORT"),
+    }
+}
 
 
 # Password validation
@@ -97,7 +97,6 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
