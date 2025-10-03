@@ -12,3 +12,10 @@ uv venv --python 3.11.11 hh_env
 source hh_env/bin/activate
 uv pip install ruff
 ```
+
+Run commands on the django docker container
+```
+docker exec hh_app python manage.py startapp main
+docker exec hh_app python manage.py makemigrations main
+docker exec hh_app python manage.py migrate
+```
