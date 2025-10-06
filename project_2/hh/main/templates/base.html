@@ -1,0 +1,28 @@
+{% load django_htmx %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}My App{% endblock %}</title>
+
+    <!-- Tailwind via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- HTMX -->
+    {% htmx_script %}
+</head>
+
+<body class="bg-gray-100 text-gray-900" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    <nav class="p-4 bg-blue-600 text-white flex gap-4">
+        <a href="{% url 'locations' %}" class="hover:underline">Locations</a>
+        <a href="{% url 'sensors' %}" class="hover:underline">Sensors</a>
+    </nav>
+
+    <main class="p-6">
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+
+</html>

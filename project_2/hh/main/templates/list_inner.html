@@ -1,0 +1,9 @@
+<ul class="space-y-2">
+    {% for item in items %}
+    <li class="p-3 bg-white rounded-lg shadow hover:bg-blue-50 transition">
+        {{ item }}
+    </li>
+    {% empty %}
+    <li class="text-gray-500">No {{ title|lower }} found.</li>
+    {% endfor %}
+</ul>
