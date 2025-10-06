@@ -12,5 +12,6 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 USER django
-EXPOSE 8000
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+EXPOSE 8000 3000
+# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "-m", "debugpy", "--listen", "0.0.0.0:3000", "manage.py", "runserver", "0.0.0.0:8000"]

@@ -8,6 +8,34 @@
 			"source.fixAll.ruff": "explicit"
 		}
 	},
+	"launch": {
+		"configurations": [
+			{
+				"name": "Python: Current File",
+				"type": "debugpy",
+				"request": "launch",
+				"program": "${file}",
+				"console": "internalConsole",
+				"justMyCode": true
+			},
+			{
+				"name": "Attach to Django",
+				"type": "debugpy",
+				"request": "attach",
+				"connect": {
+					"host": "localhost",
+					"port": 3000
+				},
+				"django": true,
+				"pathMappings": [
+					{
+						"localRoot": "${workspaceFolder}/project_2/hh",
+						"remoteRoot": "/hh"
+					},
+				]
+			}
+		]
+	},
 	"folders": [
 		{
 			"path": "."

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # user apps
     "main",
     "django_htmx",
+    "ninja",
 ]
 
 MIDDLEWARE = [
