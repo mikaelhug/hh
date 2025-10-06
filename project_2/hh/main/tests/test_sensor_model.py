@@ -1,19 +1,18 @@
 import uuid
 
 import pytest
-from django.contrib import admin
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 
-from main.admin import SensorAdmin
-from main.models import Sensor
-
-# TODO
+from main.models import Location, Sensor
 
 
 @pytest.mark.django_db
 def test_sensor_uuid_name():
-    a = Sensor.objects.create(name="Stockholm")
-    b = Sensor.objects.create(name="Oslo")
+    loc = Location.objects.create(name="Stockholm")
+
+    a = Sensor.objects.create(name="SensorA", location=loc)
+    b = Sensor.objects.create(name="SensorB", location=loc, description="Humidity sensosor")
 
     # UUID
     assert isinstance(a.id, uuid.UUID)
@@ -21,29 +20,38 @@ def test_sensor_uuid_name():
     assert a.id != b.id  # ensure unique UUIDs
     assert a.id.version == 4  # ensure UUID4
 
-    # Name & Slug
-    assert a.name == "Stockholm"
-    assert a.slug == "stockholm"
+    # Name
+    assert a.name == "SensorA"
+    assert b.description == "Humidity sensosor"
 
 
 @pytest.mark.django_db
-def test_Sensor_name_length_constraints():
+def test_sensor_must_have_location():
+    # sensor must belong to a location
+    with pytest.raises(IntegrityError):
+        Sensor.objects.create(name="SensorC")
+
+
+@pytest.mark.django_db
+def test_sensor_uniqueness():
+    loc = Location.objects.create(name="Stockholm")
+    Sensor.objects.create(name="SensorA", location=loc)
+
+    # sensor names are unique per location
+    with pytest.raises(IntegrityError):
+        Sensor.objects.create(name="SensorA", location=loc)
+
+
+@pytest.mark.django_db
+def test_sensor_name_length_constraints():
     # create python object in memory only
     # run full_clean to run validators on model class
     # Alert if **not** fail
 
-    loc = Sensor(name="S")
+    sens = Sensor(name="S")
     with pytest.raises(ValidationError):
-        loc.full_clean()
+        sens.full_clean()
 
-    loc = Sensor(name="S" * 41)
+    sens = Sensor(name="S" * 41)
     with pytest.raises(ValidationError):
-        loc.full_clean()
-
-
-@pytest.mark.django_db
-def test_slug_autopopulated_in_admin():
-    # ensure the key "slug" is in prepopulated_fields its value is ("name",)
-    model_admin = SensorAdmin(Sensor, admin.site)
-    assert "slug" in model_admin.prepopulated_fields
-    assert model_admin.prepopulated_fields["slug"] == ("name",)
+        sens.full_clean()
