@@ -39,7 +39,7 @@ class Location(models.Model):
 
     # in case slug is ereased in admin, enforce one
     def save(self, *args, **kwargs) -> None:
-        if self.name and not self.slug:  # only set slug if name exists and slug is empty
+        if (self.name and not self.slug) or (slugify(self.name) != self.slug):
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
