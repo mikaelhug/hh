@@ -1,4 +1,49 @@
 services:
+  timescale1:
+    image: timescale/timescaledb:latest-pg17
+    container_name: hh_timescale1
+    restart: "no"
+    networks:
+      - hh_network
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}_TS1
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      TZ: Europe/Stockholm
+    ports:
+      - "5433:5432"
+    volumes:
+      - timescale1_data:/var/lib/postgresql/data
+
+  timescale2:
+    image: timescale/timescaledb:latest-pg17
+    container_name: hh_timescale2
+    restart: "no"
+    networks:
+      - hh_network
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}_TS2
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      TZ: Europe/Stockholm
+    ports:
+      - "5434:5432"
+    volumes:
+      - timescale2_data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: hh_rabbitmq
+    restart: "no"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - hh_network
+
   db:
     image: postgres:latest
     container_name: hh_db
@@ -43,12 +88,21 @@ services:
       - "3000:3000"
     depends_on:
       - db
+      - rabbitmq
+      - timescale1
+      - timescale2
     env_file:
       - .env
 
 volumes:
   db:
     name: db
+  kafka_data:
+    name: kafka_data
+  timescale1_data:
+    name: timescale1_data
+  timescale2_data:
+    name: timescale2_data
 
 networks:
   hh_network:
