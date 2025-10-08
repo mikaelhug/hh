@@ -20,6 +20,23 @@ docker exec hh_app python manage.py makemigrations main
 docker exec hh_app python manage.py migrate
 ```
 
+Add port settings to forward ports automatically for all needed services
+when using remote-dev in VScode
+```
+"remote.SSH.defaultForwardedPorts": [
+     {
+          "localPort": 8000,
+          "remotePort": 8000,
+          "name": "Django"
+     },
+     {
+          "localPort": 15672,
+          "remotePort": 15672,
+          "name": "RabbitMQ"
+     }
+]
+```
+
 API Calls
 Sensor
 ```
