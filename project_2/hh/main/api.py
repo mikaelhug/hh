@@ -8,6 +8,7 @@ from ninja.errors import HttpError
 from pydantic import Field
 
 from .models import MAX_NAME_LENGTH, MIN_NAME_LENGTH, Location, Sensor
+from .tasks import forward_to_message_queue
 
 api = NinjaAPI(title="HH Project API")
 
@@ -22,6 +23,13 @@ class LocationSchema(Schema):
     id: str
     name: str
     slug: str
+
+
+class SensorData(Schema):
+    time: str  # UTC ISO timestamp
+    sensor_id: str  # UUID4
+    location_id: str  # UUID4
+    temperature: float  # Celsius
 
 
 # Validate with Pydantic rules
@@ -194,3 +202,16 @@ def delete_location(request, slug: str) -> tuple[Literal[204], None]:
     location = get_object_or_404(Location, slug=slug)
     location.delete()
     return 204, None
+
+
+@api.post("/data/", summary="Receive sensor data")
+def receive_sensor_data(request, payload: SensorData) -> dict[str, str | dict]:
+    """
+    Receives sensor data from a sensor device and forwards it to RabbitMQ via Celery.
+    """
+    data_dict = payload.dict()
+
+    # Send the data to Celery for asynchronous processing
+    forward_to_message_queue.delay(data_dict)  # type: ignore
+
+    return {"status": "queued", "data": data_dict}

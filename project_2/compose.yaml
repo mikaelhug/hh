@@ -97,8 +97,6 @@ services:
 volumes:
   db:
     name: db
-  kafka_data:
-    name: kafka_data
   timescale1_data:
     name: timescale1_data
   timescale2_data:

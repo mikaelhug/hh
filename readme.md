@@ -86,5 +86,16 @@ curl -X PUT "http://localhost:8000/api/locations/comets/" \
 
 <!-- Delete -->
 curl -X DELETE "http://localhost:8000/api/locations/comets/"
+```
 
+Sensor Data
+```
+curl -X POST http://localhost:8000/api/data/ \
+  -H "Content-Type: application/json" \
+  -d '{
+        "time": "2025-10-10T12:00:00Z",
+        "sensor_id": "c2e34a4a-9b32-4d9b-92a5-d9fbb733b431",
+        "location_id": "5b19b1ab-0b6a-49c7-8b0a-73ef8f6de47a",
+        "temperature": 22.5
+      }'
 ```

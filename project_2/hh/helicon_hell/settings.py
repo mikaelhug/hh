@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "main",
     "django_htmx",
     "ninja",
+    "django_celery_results",
 ]
 
 MIDDLEWARE = [
@@ -126,3 +127,10 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CELERY_BROKER_URL = "amqp://guest:guest@rabbitmq:5672//"  # adjust to match docker service name
+CELERY_RESULT_BACKEND = "django-db"  # optional, or 'rpc://' if you don’t use django-celery-results
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = "Europe/Stockholm"
